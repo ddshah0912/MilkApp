@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-class app1 extends StatelessWidget{
+class Login extends StatelessWidget{
   @override
   Widget build(BuildContext cotext){
     return MaterialApp(title: "Log In",home: LoginPage());
