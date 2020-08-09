@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:login/pages/FirstPage.dart';
+import 'package:login/pages/home.dart';
 
 class Login extends StatelessWidget{
   @override
@@ -76,13 +78,25 @@ class _LoginPageState extends State<LoginPage>{
             SizedBox(height: 20.0,),
             Container(
               height: 50.0,
-              decoration: BoxDecoration(
-                color: Colors.blue,
-                borderRadius: BorderRadius.circular(25.0)
-              ),
-              child: Center(
-                child: Text("Log In", style: TextStyle(color: Colors.white, fontSize: 18.0, fontWeight: FontWeight.bold),),
-              ),
+              child: Material(
+                color: Colors.blueAccent,
+                borderRadius: BorderRadius.circular(12.0),
+                child: GestureDetector(
+                  onTap: (){
+                    runApp(new MaterialApp(
+                      home: new MyTabs()
+                    )); 
+                  },
+                  child: Center(
+                    child: Text('Login',
+                    style: TextStyle(
+                      color:Colors.black
+                    ),
+                    ),
+                  ),
+                ),
+              )
+              
             ),
             Divider(height: 20.0,),
             Row(
