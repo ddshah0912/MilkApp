@@ -83,9 +83,15 @@ class _LoginPageState extends State<LoginPage>{
                 borderRadius: BorderRadius.circular(12.0),
                 child: GestureDetector(
                   onTap: (){
-                    runApp(new MaterialApp(
-                      home: new MyTabs()
-                    )); 
+                    bool auth=true;
+                    if(auth){
+                        runApp(new MaterialApp(
+                          home: new MyTabs()
+                        ));
+                    }
+                    else{
+                      debugPrint('Incorrect Email or Password');
+                    }
                   },
                   child: Center(
                     child: Text('Login',
