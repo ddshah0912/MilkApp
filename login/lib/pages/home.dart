@@ -29,7 +29,7 @@ class MyTabState extends State<MyTabs> with SingleTickerProviderStateMixin{
   Widget build(BuildContext context){
     return new Scaffold(
       appBar: new AppBar(
-        title: new Text("MilInWay"),
+        title: new Text("MilkInWay"),
       ),
       bottomNavigationBar: new Material(
         color: Colors.blueAccent,
