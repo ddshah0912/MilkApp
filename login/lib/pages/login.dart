@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:login/pages/FirstPage.dart';
+import 'package:login/pages/HomePage.dart';
 import 'package:login/pages/home.dart';
 
 class Login extends StatelessWidget{

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 
-class Third extends StatelessWidget{
+class Contact extends StatelessWidget{
   @override
   Widget build(BuildContext context){
     return new Container(

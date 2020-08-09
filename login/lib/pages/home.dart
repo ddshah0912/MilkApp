@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import './FirstPage.dart' as first;
-import './SecondPage.dart' as second;
-import './ThirdPage.dart' as third;
-import './ForthPage.dart' as forth;
+import './HomePage.dart' as home;
+import './ManagePage.dart' as manage;
+import './ContactPage.dart' as contact;
+import './UserPage.dart' as user;
 
 class MyTabs extends StatefulWidget{
   @override
@@ -46,10 +46,10 @@ class MyTabState extends State<MyTabs> with SingleTickerProviderStateMixin{
       body: new TabBarView(
         controller: controller,
         children: <Widget>[
-          new first.First(),
-          new second.Second(),
-          new third.Third(),
-          new forth.Forth()
+          new home.Home(),
+          new manage.Manage(),
+          new contact.Contact(),
+          new user.User()
         ],
       )
     );
