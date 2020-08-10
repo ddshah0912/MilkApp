@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 
-class Signup extends StatefulWidget {
+class SignUpScreen extends StatefulWidget {
   @override
   _SignUpScreenState createState() => _SignUpScreenState();
 }
 
-class _SignUpScreenState extends State<Signup> {
+class _SignUpScreenState extends State<SignUpScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -86,7 +86,7 @@ class _SignUpScreenState extends State<Signup> {
                   height: 60,
                   child: RaisedButton(
                     onPressed: () {
-                      Navigator.pushNamed(context, 'Home');
+                      Navigator.pushNamed(context, 'Login');
                     },
                     color: Color(0xFF00a79B),
                     child: Text(
@@ -115,9 +115,9 @@ class BackButtonWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       height: 200,
-      decoration: BoxDecoration(
-          image: DecorationImage(
-              fit: BoxFit.cover, image: AssetImage('asset/img/app.png'))),
+      // decoration: BoxDecoration(
+      //     image: DecorationImage(
+      //         fit: BoxFit.cover, image: AssetImage('asset/img/app.png'))),
       child: Positioned(
           child: Stack(
         children: <Widget>[
@@ -158,4 +158,3 @@ class BackButtonWidget extends StatelessWidget {
     );
   }
 }
-

@@ -12,9 +12,7 @@ class User extends StatelessWidget{
         borderRadius: BorderRadius.circular(12.0),
         child: GestureDetector(
           onTap: (){
-              runApp(new MaterialApp(
-                  home: new Login()
-                ));
+              Navigator.pushNamed(context, 'Login');
           },
           child: Center(
             child: Text('Logout',
