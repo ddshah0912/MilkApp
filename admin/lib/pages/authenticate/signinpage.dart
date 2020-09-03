@@ -90,8 +90,6 @@ class _SignInScreenState extends State<Login> {
                           setState(() => _error = 'Invalid credentials');
                         }
                       }
-
-                      print('Invalid');
                     },
                     color: Color(0xFF00a79B),
                     child: Text(
