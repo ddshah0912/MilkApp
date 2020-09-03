@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "358425558876",
+    "firebase_url": "https://milkinway-dfd29.firebaseio.com",
+    "project_id": "milkinway-dfd29",
+    "storage_bucket": "milkinway-dfd29.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:358425558876:android:fa602a5e3c964204244b99",
+        "android_client_info": {
+          "package_name": "com.example.admin"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "358425558876-88ugrf3hm07c2o9apslv6b4k2p8huaoc.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBueRElRurI5_KmnoJdZFKf_aC62ydw6WY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "358425558876-88ugrf3hm07c2o9apslv6b4k2p8huaoc.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
