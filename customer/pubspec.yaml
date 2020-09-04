@@ -27,6 +27,11 @@ dependencies:
   cloud_firestore: ^0.12.9+4
   provider: ^3.1.0
   firebase_core_web: ^0.2.0
+  google_maps_flutter: any
+  google_maps_webservice: ^0.0.14
+  flutter_google_places: ^0.2.3
+  table_calendar: ^2.2.3 
+  carousel_pro: ^0.0.13
 
 
   # The following adds the Cupertino Icons font to your application.
@@ -47,6 +52,16 @@ flutter:
   # included with your application, so that you can use the icons in
   # the material Icons class.
   uses-material-design: true
+
+  assets:
+    - assets/images/cowmilk500.jpg
+    - assets/images/cowmilk1000.jpg
+    - assets/images/img1.jpg
+    - assets/images/img2.jpg
+    - assets/images/img3.jpg
+    - assets/images/img4.jpg
+    - assets/images/img5.jpg
+
 
   # To add assets to your application, add an assets section, like this:
   # assets:

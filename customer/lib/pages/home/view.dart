@@ -1,5 +1,7 @@
+import 'package:customer/pages/home.dart';
 import 'package:flutter/material.dart';
 import 'homepage.dart';
+import 'ManagePage.dart';
 
 class View extends StatelessWidget{
   @override
@@ -12,7 +14,8 @@ class View extends StatelessWidget{
       ),
       initialRoute: 'Home',
       routes:{
-        'Home':(context)=>Home(),
+        'Home':(context)=>MyTabs(),
+        'Manage':(context)=>Manage(),
       },
     );
   }
