@@ -1,30 +1,55 @@
+import 'package:customer/services/auth.dart';
 import 'package:flutter/material.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 
-class Login extends StatefulWidget {
+class Register extends StatefulWidget {
   final Function toggleView;
-  Login({this.toggleView});
+  Register({this.toggleView});
+
   @override
-  _SignInScreenState createState() => _SignInScreenState();
+  _RegisterState createState() => _RegisterState();
 }
 
-class _SignInScreenState extends State<Login> {
-  final FirebaseAuth _auth = FirebaseAuth.instance;
-  String _email, _password, _error = "";
-  final GlobalKey<FormState> _formkey = GlobalKey<FormState>();
+class _RegisterState extends State<Register> {
+  final AuthService _auth = AuthService();
+  final _formkey = GlobalKey<FormState>();
+  String error = '';
+
+  // text field state
+  String email = '';
+  String password = '';
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppBar(
         elevation: 0.0,
         title: Text('MilkInWay'),
+        actions: <Widget>[
+          FlatButton.icon(
+            icon: Icon(Icons.person),
+            label: Text('SignIn'),
+            onPressed: () => widget.toggleView(),
+          ),
+        ],
       ),
       body: Form(
         key: _formkey,
         child: Column(
           children: <Widget>[
-            SizedBox(
-              height: 20,
+            Padding(
+              padding: const EdgeInsets.all(20.0),
+              child: Row(
+                children: <Widget>[
+                  IconButton(icon: Icon(Icons.person), onPressed: null),
+                  Expanded(
+                      child: Container(
+                          margin: EdgeInsets.only(right: 20, left: 10),
+                          child: TextFormField(
+                            decoration: InputDecoration(hintText: 'Username'),
+                          )))
+                ],
+              ),
             ),
             Padding(
               padding: const EdgeInsets.all(20.0),
@@ -37,12 +62,12 @@ class _SignInScreenState extends State<Login> {
                           child: TextFormField(
                             validator: (input) {
                               if (input.isEmpty) {
-                                debugPrint('Enter UserName');
-                                return 'Enter User Name';
+                                debugPrint('Enter Email');
+                                return 'Enter User Email';
                               }
                             },
                             onChanged: (input) {
-                              setState(() => _email = input);
+                              setState(() => email = input);
                             },
                             decoration: InputDecoration(hintText: 'email'),
                           )))
@@ -64,7 +89,7 @@ class _SignInScreenState extends State<Login> {
                               }
                             },
                             onChanged: (input) {
-                              setState(() => _password = input);
+                              setState(() => password = input);
                             },
                             decoration: InputDecoration(hintText: 'Password'),
                             obscureText: true,
@@ -83,56 +108,37 @@ class _SignInScreenState extends State<Login> {
                   height: 60,
                   child: RaisedButton(
                     onPressed: () async {
-                      print(_email);
-                      // print(_password);
                       if (_formkey.currentState.validate()) {
-                        dynamic result = await _auth.signInWithEmailAndPassword(
-                            email: _email, password: _password);
-                        print(result);
+                        dynamic result = await _auth
+                            .registerWithEmailAndPassword(email, password);
                         if (result == null) {
-                          setState(() => _error = 'Invalid credentials');
+                          setState(() {
+                            error = 'Please supply a valid email';
+                          });
                         }
                       }
                     },
                     color: Color(0xFF00a79B),
                     child: Text(
-                      'SIGN IN',
+                      'Sign Up',
                       style: TextStyle(
                           color: Colors.white,
                           fontWeight: FontWeight.bold,
                           fontSize: 20),
                     ),
                   ),
+                  
                 ),
               ),
             ),
             SizedBox(height: 12.0),
             Text(
-              _error,
+              error,
               style: TextStyle(color: Colors.red, fontSize: 14.0),
             ),
             SizedBox(
               height: 20,
             ),
-            InkWell(
-            onTap: (){
-              widget.toggleView();
-            },
-              child: Center(
-              child: RichText(
-                text: TextSpan(
-                    text: 'Don\'t have an account?',
-                    style: TextStyle(color: Colors.black),
-                    children: [
-                      TextSpan(
-                        text: 'SIGN UP',
-                        style: TextStyle(
-                            color: Colors.teal, fontWeight: FontWeight.bold),
-                      )
-                    ]),
-              ),
-            ),
-          )
           ],
         ),
       ),

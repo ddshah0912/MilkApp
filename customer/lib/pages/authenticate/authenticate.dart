@@ -1,5 +1,5 @@
-import 'package:admin/pages/authenticate/register.dart';
-import 'package:admin/pages/authenticate/signinpage.dart';
+import 'package:customer/pages/authenticate/register.dart';
+import 'package:customer/pages/authenticate/signinpage.dart';
 import 'package:flutter/material.dart';
 
 class Authenticate extends StatefulWidget {
