@@ -1,9 +1,11 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 class Login extends StatefulWidget {
   final Function toggleView;
   Login({this.toggleView});
+
   @override
   _SignInScreenState createState() => _SignInScreenState();
 }
@@ -23,8 +25,9 @@ class _SignInScreenState extends State<Login> {
         key: _formkey,
         child: Column(
           children: <Widget>[
+            showAlert(),
             SizedBox(
-              height: 20,
+              height: 10,
             ),
             Padding(
               padding: const EdgeInsets.all(20.0),
@@ -73,6 +76,27 @@ class _SignInScreenState extends State<Login> {
               ),
             ),
             SizedBox(
+              height: 5,
+            ),
+            InkWell(
+              onTap: () {
+                if (_email.isEmpty == false) {
+                  print(_email);
+                  //widget.toggleView();
+                  createAlertDialog(context);
+                }
+              },
+              child: Center(
+                child: RichText(
+                  text: TextSpan(
+                    text: 'Forgot Password??',
+                    style: TextStyle(
+                        color: Colors.teal, fontWeight: FontWeight.bold),
+                  ),
+                ),
+              ),
+            ),
+            SizedBox(
               height: 20,
             ),
             Padding(
@@ -85,13 +109,18 @@ class _SignInScreenState extends State<Login> {
                     onPressed: () async {
                       print(_email);
                       // print(_password);
-                      if (_formkey.currentState.validate()) {
-                        dynamic result = await _auth.signInWithEmailAndPassword(
-                            email: _email, password: _password);
-                        print(result);
-                        if (result == null) {
-                          setState(() => _error = 'Invalid credentials');
+                      try {
+                        if (_formkey.currentState.validate()) {
+                          dynamic result =
+                              await _auth.signInWithEmailAndPassword(
+                                  email: _email, password: _password);
+                          print(result);
+                          if (result == null) {
+                            setState(() => _error = 'Invalid credentials');
+                          }
                         }
+                      } catch (e) {
+                        setState(() => _error = e.message);
                       }
                     },
                     color: Color(0xFF00a79B),
@@ -106,36 +135,88 @@ class _SignInScreenState extends State<Login> {
                 ),
               ),
             ),
-            SizedBox(height: 12.0),
-            Text(
-              _error,
-              style: TextStyle(color: Colors.red, fontSize: 14.0),
-            ),
             SizedBox(
               height: 20,
             ),
             InkWell(
-            onTap: (){
-              widget.toggleView();
-            },
+              onTap: () {
+                widget.toggleView();
+              },
               child: Center(
-              child: RichText(
-                text: TextSpan(
-                    text: 'Don\'t have an account?',
-                    style: TextStyle(color: Colors.black),
-                    children: [
-                      TextSpan(
-                        text: 'SIGN UP',
-                        style: TextStyle(
-                            color: Colors.teal, fontWeight: FontWeight.bold),
-                      )
-                    ]),
+                child: RichText(
+                  text: TextSpan(
+                      text: 'Don\'t have an account?',
+                      style: TextStyle(color: Colors.black),
+                      children: [
+                        TextSpan(
+                          text: 'SIGN UP',
+                          style: TextStyle(
+                              color: Colors.teal, fontWeight: FontWeight.bold),
+                        )
+                      ]),
+                ),
               ),
             ),
-          )
           ],
         ),
       ),
     );
+  }
+
+  Widget showAlert() {
+    if (_error != "") {
+      return Container(
+        color: Colors.amberAccent,
+        width: double.infinity,
+        padding: EdgeInsets.all(8.0),
+        child: Row(
+          children: <Widget>[
+            Padding(
+              padding: const EdgeInsets.only(right: 8.0),
+              child: Icon(Icons.error_outline),
+            ),
+            Expanded(
+              child: AutoSizeText(
+                _error,
+                maxLines: 3,
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(left: 8.0),
+              child: IconButton(
+                  icon: Icon(Icons.close),
+                  onPressed: () {
+                    setState(() => _error = "");
+                  }),
+            ),
+          ],
+        ),
+      );
+    }
+    return SizedBox();
+  }
+
+  createAlertDialog(BuildContext context) {
+    return showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            title: Text('Reset Password'),
+            content: Text('Reset Password link will be sent to email'),
+            actions: <Widget>[
+              MaterialButton(
+                  child: Text('Cancel'),
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  }),
+              MaterialButton(
+                  child: Text('Confirm'),
+                  onPressed: () async{
+                      dynamic result= _auth.sendPasswordResetEmail(email: _email);
+                    Navigator.of(context).pop();
+                  }),
+            ],
+          );
+        });
   }
 }

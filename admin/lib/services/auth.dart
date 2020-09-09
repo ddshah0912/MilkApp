@@ -1,5 +1,8 @@
+import 'package:admin/pages/authenticate/register.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:admin/models/user.dart';
+
+import './database/userdatabase.dart';
 
 class AuthService{
   final FirebaseAuth _auth = FirebaseAuth.instance;
@@ -15,14 +18,14 @@ class AuthService{
   }
 
   // register with email and password
-  Future registerWithEmailAndPassword(String email, String password) async {
+  Future registerWithEmailAndPassword(String email, String password,String fname,String lname,String contact) async {
     try {
       AuthResult result = await _auth.createUserWithEmailAndPassword(email: email.trim(), password: password.trim());
       FirebaseUser user = result.user;
+      await UserDatabase(uid: user.uid).updateUserData(fname,lname, contact);
       return _userFromFirebaseUser(user);
     } catch (error) {
-      print(error.toString());
-      return null;
+      return error;
     } 
   }
 
@@ -31,11 +34,19 @@ class AuthService{
     try {
       AuthResult result = await _auth.signInWithEmailAndPassword(email: email.trim(), password: password.trim());
       FirebaseUser user = result.user;
-      return user;
+      return _userFromFirebaseUser(user);
     } catch (error) {
-      print(error.toString());
       return null;
     } 
+  }
+
+  //Forgot Password
+  Future sendPasswordResetEmail(String email) async{
+    try{
+      await _auth.sendPasswordResetEmail(email: email);
+    }catch(err){
+      return null;
+    }
   }
   //SignOut
   Future signOut() async {

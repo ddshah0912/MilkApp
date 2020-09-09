@@ -1,4 +1,5 @@
 import 'package:admin/services/auth.dart';
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 
 class Register extends StatefulWidget {
@@ -12,11 +13,12 @@ class Register extends StatefulWidget {
 class _RegisterState extends State<Register> {
   final AuthService _auth = AuthService();
   final _formkey = GlobalKey<FormState>();
-  String error = '';
+  String _error = "";
 
   // text field state
-  String email = '';
-  String password = '';
+  String _email = '';
+  String _password = '';
+  String _firstName, _lastName, _contact;
 
   @override
   Widget build(BuildContext context) {
@@ -37,6 +39,8 @@ class _RegisterState extends State<Register> {
         key: _formkey,
         child: Column(
           children: <Widget>[
+            showAlert(),
+            SizedBox(height: 10),
             Padding(
               padding: const EdgeInsets.all(20.0),
               child: Row(
@@ -46,7 +50,31 @@ class _RegisterState extends State<Register> {
                       child: Container(
                           margin: EdgeInsets.only(right: 20, left: 10),
                           child: TextFormField(
-                            decoration: InputDecoration(hintText: 'Username'),
+                            validator: (input) {
+                              if (input.isEmpty) {
+                                debugPrint('FN invalid');
+                                return 'Enter First Name';
+                              }
+                            },
+                            onChanged: (input) {
+                              setState(() => _firstName = input);
+                            },
+                            decoration: InputDecoration(hintText: 'FirstName'),
+                          ))),
+                  Expanded(
+                      child: Container(
+                          margin: EdgeInsets.only(right: 20, left: 10),
+                          child: TextFormField(
+                            validator: (input) {
+                              if (input.isEmpty) {
+                                debugPrint('LN invalid');
+                                return 'Enter Last Name';
+                              }
+                            },
+                            onChanged: (input) {
+                              setState(() => _lastName = input);
+                            },
+                            decoration: InputDecoration(hintText: 'LastName'),
                           )))
                 ],
               ),
@@ -62,12 +90,12 @@ class _RegisterState extends State<Register> {
                           child: TextFormField(
                             validator: (input) {
                               if (input.isEmpty) {
-                                debugPrint('Enter Email');
-                                return 'Enter User Email';
+                                debugPrint('Email invalid');
+                                return 'Enter Email Adress';
                               }
                             },
                             onChanged: (input) {
-                              setState(() => email = input);
+                              setState(() => _email = input);
                             },
                             decoration: InputDecoration(hintText: 'email'),
                           )))
@@ -78,10 +106,33 @@ class _RegisterState extends State<Register> {
               padding: EdgeInsets.all(20.0),
               child: Row(
                 children: <Widget>[
-                  IconButton(icon: Icon(Icons.lock), onPressed: null),
+                  IconButton(icon: Icon(Icons.call), onPressed: null),
                   Expanded(
                       child: Container(
                           margin: EdgeInsets.only(right: 20, left: 10),
+                          child: TextFormField(
+                            validator: (input) {
+                              if (input.length !=10) {
+                                debugPrint('contact invalid');
+                                return 'Enter 10-digit contact number';
+                              }
+                            },
+                            onChanged: (input) {
+                              setState(() => _contact = input);
+                            },
+                            decoration: InputDecoration(hintText: 'Phone'),
+                          ))),
+                ],
+              ),
+            ),
+            Padding(
+              padding: EdgeInsets.all(20.0),
+              child: Row(
+                children: <Widget>[
+                  IconButton(icon: Icon(Icons.lock), onPressed: null),
+                  Expanded(
+                      child: Container(
+                          margin: EdgeInsets.only(right: 5, left: 10),
                           child: TextFormField(
                             validator: (input) {
                               if (input.length < 6) {
@@ -89,11 +140,24 @@ class _RegisterState extends State<Register> {
                               }
                             },
                             onChanged: (input) {
-                              setState(() => password = input);
+                              setState(() => _password = input);
                             },
                             decoration: InputDecoration(hintText: 'Password'),
                             obscureText: true,
                           ))),
+                  Expanded(
+                      child: Container(
+                    margin: EdgeInsets.only(right: 20, left: 0),
+                    child: TextFormField(
+                      obscureText: true,
+                      validator: (input) {
+                        if (input != _password) {
+                          return 'password does\'t match ';
+                        }
+                      },
+                      decoration: InputDecoration(hintText: 'Confirm Password'),
+                    ),
+                  )),
                 ],
               ),
             ),
@@ -108,14 +172,18 @@ class _RegisterState extends State<Register> {
                   height: 60,
                   child: RaisedButton(
                     onPressed: () async {
-                      if (_formkey.currentState.validate()) {
-                        dynamic result = await _auth
-                            .registerWithEmailAndPassword(email, password);
-                        if (result == null) {
-                          setState(() {
-                            error = 'Please supply a valid email';
-                          });
+                      try {
+                        if (_formkey.currentState.validate()) {
+                          dynamic result = await _auth
+                              .registerWithEmailAndPassword(_email, _password,_firstName,_lastName,_contact);
+                          print(result);
+                          if (result) {
+                            _error = 'Please supply a valid email';
+                          }
                         }
+                      } catch (exception) {
+                        print("_errorMESSAGEIS" + exception.message);
+                        setState(() => _error = exception.message);
                       }
                     },
                     color: Color(0xFF00a79B),
@@ -127,13 +195,12 @@ class _RegisterState extends State<Register> {
                           fontSize: 20),
                     ),
                   ),
-                  
                 ),
               ),
             ),
             SizedBox(height: 12.0),
             Text(
-              error,
+              _error,
               style: TextStyle(color: Colors.red, fontSize: 14.0),
             ),
             SizedBox(
@@ -143,5 +210,38 @@ class _RegisterState extends State<Register> {
         ),
       ),
     );
+  }
+
+  Widget showAlert() {
+    if (_error != "") {
+      return Container(
+        color: Colors.amberAccent,
+        width: double.infinity,
+        padding: EdgeInsets.all(8.0),
+        child: Row(
+          children: <Widget>[
+            Padding(
+              padding: const EdgeInsets.only(right: 8.0),
+              child: Icon(Icons.error_outline),
+            ),
+            Expanded(
+              child: AutoSizeText(
+                _error,
+                maxLines: 3,
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(left: 8.0),
+              child: IconButton(
+                  icon: Icon(Icons.close),
+                  onPressed: () {
+                    setState(() => _error = "");
+                  }),
+            ),
+          ],
+        ),
+      );
+    }
+    return SizedBox();
   }
 }
