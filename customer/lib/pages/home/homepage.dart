@@ -1,11 +1,14 @@
 import 'package:carousel_pro/carousel_pro.dart';
+import 'package:customer/models/item.dart';
+import 'package:customer/services/database/itemdatabase.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_google_places/flutter_google_places.dart';
 import 'package:google_maps_webservice/places.dart';
-import 'package:customer/pages/home/product.dart';
-import 'package:customer/pages/home/product_card.dart';
+import 'package:customer/pages/home/itemlist.dart';
+import 'package:customer/pages/home/itemcard.dart';
 import 'package:customer/pages/home/searchfield.dart';
+import 'package:provider/provider.dart';
 import 'package:table_calendar/table_calendar.dart';
 
 /*class Home extends StatelessWidget {
@@ -85,9 +88,17 @@ class _Home extends State<Home>{
               ),
             ],
           ),
-          ProductCategory(),
+          viewItem(),
         ],
       )
+    );
+  }
+  Widget viewItem() {
+    return Container(
+      child: StreamProvider<List<Item>>.value(
+        value: ItemDatabase().items,
+        child: ItemList(),
+      ),
     );
   }
 }

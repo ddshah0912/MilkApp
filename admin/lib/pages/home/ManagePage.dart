@@ -84,7 +84,7 @@ class _Manage extends State<Manage> {
               padding: const EdgeInsets.all(20.0),
               child: Row(
                 children: <Widget>[
-                  IconButton(icon: Icon(Icons.money), onPressed: null),
+                  IconButton(icon: Icon(Icons.money_off), onPressed: null),
                   Expanded(
                       child: Container(
                           margin: EdgeInsets.only(right: 20, left: 10),

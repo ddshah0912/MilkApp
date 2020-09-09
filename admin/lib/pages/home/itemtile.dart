@@ -85,7 +85,7 @@ class ItemTile extends StatelessWidget {
                             child: Row(
                               children: <Widget>[
                                 IconButton(
-                                    icon: Icon(Icons.money), onPressed: null),
+                                    icon: Icon(Icons.money_off), onPressed: null),
                                 Expanded(
                                     child: Container(
                                         margin: EdgeInsets.only(
