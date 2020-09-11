@@ -112,7 +112,7 @@ class _RegisterState extends State<Register> {
                           margin: EdgeInsets.only(right: 20, left: 10),
                           child: TextFormField(
                             validator: (input) {
-                              if (input.length !=10) {
+                              if (input.length != 10) {
                                 debugPrint('contact invalid');
                                 return 'Enter 10-digit contact number';
                               }
@@ -174,12 +174,9 @@ class _RegisterState extends State<Register> {
                     onPressed: () async {
                       try {
                         if (_formkey.currentState.validate()) {
-                          dynamic result = await _auth
-                              .registerWithEmailAndPassword(_email, _password,_firstName,_lastName,_contact);
-                          print(result);
-                          if (result) {
-                            _error = 'Please supply a valid email';
-                          }
+                          dynamic result =
+                              await _auth.registerWithEmailAndPassword(_email,
+                                  _password, _firstName, _lastName, _contact);
                         }
                       } catch (exception) {
                         print("_errorMESSAGEIS" + exception.message);
@@ -197,11 +194,6 @@ class _RegisterState extends State<Register> {
                   ),
                 ),
               ),
-            ),
-            SizedBox(height: 12.0),
-            Text(
-              _error,
-              style: TextStyle(color: Colors.red, fontSize: 14.0),
             ),
             SizedBox(
               height: 20,

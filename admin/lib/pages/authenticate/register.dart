@@ -177,9 +177,6 @@ class _RegisterState extends State<Register> {
                           dynamic result = await _auth
                               .registerWithEmailAndPassword(_email, _password,_firstName,_lastName,_contact);
                           print(result);
-                          if (result) {
-                            _error = 'Please supply a valid email';
-                          }
                         }
                       } catch (exception) {
                         print("_errorMESSAGEIS" + exception.message);
@@ -197,11 +194,6 @@ class _RegisterState extends State<Register> {
                   ),
                 ),
               ),
-            ),
-            SizedBox(height: 12.0),
-            Text(
-              _error,
-              style: TextStyle(color: Colors.red, fontSize: 14.0),
             ),
             SizedBox(
               height: 20,
