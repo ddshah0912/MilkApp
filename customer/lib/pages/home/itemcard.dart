@@ -1,4 +1,5 @@
 import 'package:customer/models/item.dart';
+import 'package:customer/pages/home/subscribeitem.dart';
 import 'package:flutter/material.dart';
 import 'package:customer/services/database/itemdatabase.dart';
 
@@ -19,7 +20,13 @@ class ItemCard extends StatelessWidget{
             backgroundColor: Colors.amberAccent,
           ),
           title: Text('${item.name}'),
-          subtitle: Text('Price: ${item.price}   Quantity: ${item.quantity}'),
+          subtitle: Text('Price: ${item.price}'),
+          onTap: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => Subscribe()),
+            );  
+          } 
         ),
       ),
     );
