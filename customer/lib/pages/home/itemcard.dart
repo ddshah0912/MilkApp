@@ -24,7 +24,7 @@ class ItemCard extends StatelessWidget{
           onTap: () {
             Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) => Subscribe()),
+              MaterialPageRoute(builder: (context) => Subscribe(item: item)),
             );  
           } 
         ),

@@ -32,6 +32,7 @@ class MyTabState extends State<MyTabs> with SingleTickerProviderStateMixin{
     return new Scaffold(
       appBar: new AppBar(
         title: new Text("MilkInWay"),
+        centerTitle: true,
         actions: <Widget>[
             FlatButton.icon(
               icon: Icon(Icons.person),
