@@ -39,7 +39,7 @@ class SubscribePage extends State<Subscribe> {
       context: context,
       initialFirstDate: _startDate,
       initialLastDate: _endDate,
-      firstDate: new DateTime(DateTime.now().year-50),
+      firstDate: DateTime.now().subtract(Duration(days: 1)),
       lastDate: new DateTime(DateTime.now().year+50),
     );
 

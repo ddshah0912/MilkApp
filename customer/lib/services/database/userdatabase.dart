@@ -13,4 +13,15 @@ class UserDatabase{
       'contact':contact,
     });
   }
+
+  Future<void> updateAttr(String id, String houseNo, String landmark, String city, String pincode, String country) async{
+    return await adminCollection.document(id).updateData({
+      'houseNo': houseNo,
+      'landmark': landmark,
+      'city': city,
+      'pincode': pincode,
+      'country': country
+    });
+  }
+
 }
