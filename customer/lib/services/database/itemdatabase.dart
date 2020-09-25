@@ -21,4 +21,20 @@ class ItemDatabase{
   Stream<List<Item>> get items {
     return itemCollection.snapshots().map(_itemListFromSnapshot);
   }
+
+  Future<bool> isItemAvailable(String id) async {
+    DocumentSnapshot doc= await itemCollection.document(id).get();
+    try{
+      String name=doc.data['name'];
+      print(name);
+      if( name==null)
+        return false;
+      else 
+        return true;
+    }
+    catch(Exception){
+      return false;
+    }
+  }
+
 }

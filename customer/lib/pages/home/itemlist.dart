@@ -13,12 +13,20 @@ class _ItemListState extends State<ItemList> {
   Widget build(BuildContext context) {
     final List<Item> items = Provider.of<List<Item>>(context);
 
-    return Container(
+    if(items == null)
+    {
+      return Container(
+        child: Text('No Item'),
+        );
+    }
+    else{
+      return Container(
         height: 400.0,
         //width: 800.0,
         child: ListView.builder(
           //scrollDirection: Axis.horizontal,
           itemCount: items.length,
+          // ignore: missing_return
           itemBuilder: (context, index){
             if (items[index] != null) {
               return ItemCard(
@@ -28,6 +36,7 @@ class _ItemListState extends State<ItemList> {
           },
         ),
       );
+    }
   }
 }
 /*

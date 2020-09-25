@@ -61,7 +61,7 @@ class MyTabState extends State<MyTabs> with SingleTickerProviderStateMixin{
           new home.Home(),
           new manage.Manage(),
           new contact.Contact(),
-          new user.User(),
+          new user.userPage(),
         ],
       )
     );
