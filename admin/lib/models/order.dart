@@ -1,8 +1,8 @@
 class Order{
   String id;
-  String custId,itemId;
-  int amount;
+  String custId,itemName;
+  int amount,itemPrice;
   int noOfItems;
   DateTime sdate,edate; 
-  Order({this.id,this.custId, this.itemId,this.noOfItems,this.amount,this.sdate,this.edate});
+  Order({this.id,this.custId, this.itemName,this.itemPrice,this.noOfItems,this.amount,this.sdate,this.edate});
 }

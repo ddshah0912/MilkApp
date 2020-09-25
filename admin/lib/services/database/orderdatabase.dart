@@ -15,7 +15,8 @@ class OrderDatabase{
         edate: doc.data['edate'].toDate() ?? 0,
         noOfItems: doc.data['noOfItem'] ?? 0,
         amount: doc.data['amount'] ?? 0,
-        itemId: doc.data['itemId'] ?? '',
+        itemName: doc.data['itemName'] ?? '',
+        itemPrice: doc.data['itemPrice'] ?? 0,
       );
     }).toList();
   }

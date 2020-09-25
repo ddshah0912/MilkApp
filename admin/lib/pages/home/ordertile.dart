@@ -13,7 +13,7 @@ class OrderTile extends StatelessWidget {
         margin: EdgeInsets.fromLTRB(20.0, 6.0, 20.0, 0.0),
         child: ListTile(
           leading: const Icon(Icons.assignment),
-          title: Text(order.id),
+          title: Text(order.sdate.day.toString()+"/"+order.sdate.month.toString()+"/"+order.sdate.year.toString()+" to "+order.edate.day.toString()+"/"+order.edate.month.toString()+"/"+order.edate.year.toString()),
           onTap: () async {
             Navigator.push(
                 context,

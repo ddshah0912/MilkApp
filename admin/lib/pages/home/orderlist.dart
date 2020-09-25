@@ -13,13 +13,19 @@ class _OrderListState extends State<OrderList> {
   Widget build(BuildContext context) {
     final List<Order> orders = Provider.of<List<Order>>(context);
 
-    return ListView.builder(
-      itemCount: orders.length,
-      itemBuilder: (context, index) {
-        if (orders[index] != null) {
-          return OrderTile(order: orders[index]);
-        }
-      },
-    );
+    if (orders == null) {
+      return Container(
+        child:Text('No Orders'),
+      );
+    } else {
+      return ListView.builder(
+        itemCount: orders.length,
+        itemBuilder: (context, index) {
+          if (orders[index] != null) {
+            return OrderTile(order: orders[index]);
+          }
+        },
+      );
+    }
   }
 }

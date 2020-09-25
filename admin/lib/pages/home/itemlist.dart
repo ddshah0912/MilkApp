@@ -13,13 +13,19 @@ class _ItemListState extends State<ItemList> {
   Widget build(BuildContext context) {
     final List<Item> items = Provider.of<List<Item>>(context);
 
-    return ListView.builder(
-      itemCount: items.length,
-      itemBuilder: (context, index) {
-        if (items[index] != null) {
-          return ItemTile(item: items[index]);
-        }
-      },
-    );
+    if (items == null) {
+      return Container(
+        child: Text('No Items'),
+      );
+    } else {
+      return ListView.builder(
+        itemCount: items.length,
+        itemBuilder: (context, index) {
+          if (items[index] != null) {
+            return ItemTile(item: items[index]);
+          }
+        },
+      );
+    }
   }
 }

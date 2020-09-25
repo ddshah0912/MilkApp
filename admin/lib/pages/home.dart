@@ -2,6 +2,7 @@ import 'package:admin/services/auth.dart';
 import 'package:flutter/material.dart';
 import './home/HomePage.dart' as home;
 import './home/ManagePage.dart' as manage;
+import './home/calendar.dart' as calendar;
 
 class MyTabs extends StatefulWidget{
   @override
@@ -16,7 +17,7 @@ class MyTabState extends State<MyTabs> with SingleTickerProviderStateMixin{
   @override
   void initState(){
     super.initState();
-    controller = new TabController(length: 2, vsync: this);
+    controller = new TabController(length: 3, vsync: this);
   }
 
   @override
@@ -46,6 +47,7 @@ class MyTabState extends State<MyTabs> with SingleTickerProviderStateMixin{
           controller: controller,
           tabs: <Tab>[
             new Tab(icon: new Icon(Icons.home)),
+            new Tab(icon: new Icon(Icons.date_range)),
             new Tab(icon: new Icon(Icons.launch)),
           ]
         )
@@ -54,6 +56,7 @@ class MyTabState extends State<MyTabs> with SingleTickerProviderStateMixin{
         controller: controller,
         children: <Widget>[
           new home.Home(),
+          new calendar.Calendar(),
           new manage.Manage(),
         ],
       )
