@@ -1,5 +1,8 @@
 import 'dart:convert';
+import 'package:customer/pages/home/OrderManage.dart';
+import 'package:customer/pages/home/orderlist.dart';
 import 'package:customer/pages/home/vieworder.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:table_calendar/table_calendar.dart';
@@ -14,6 +17,9 @@ class ManagePage extends State<Manage> {
   Map<DateTime, List<dynamic>> _events;
   TextEditingController _eventController;
   SharedPreferences prefs;
+
+  final FirebaseAuth auth = FirebaseAuth.instance;
+  String uid;
   
   @override
   void initState() {
@@ -80,11 +86,14 @@ class ManagePage extends State<Manage> {
       ),
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.add),
-        onPressed: () {
+        onPressed: () async{
+          
+          uid = await getUserId();
+
           if (_events[_controller.selectedDay] != null) {
             print(_controller.selectedDay);
             Navigator.push(
-                context, MaterialPageRoute(builder: (context) => ViewOrder(selectedDate: _controller.selectedDay)));
+                context, MaterialPageRoute(builder: (context) => OrderManage(selectedDate: _controller.selectedDay, uid: uid)));
           } else {
             _events[_controller.selectedDay] = [_eventController.text];
           }
@@ -92,4 +101,11 @@ class ManagePage extends State<Manage> {
       ),
     );
   }
+  
+  Future<String> getUserId() async {
+    final FirebaseUser user = await auth.currentUser();
+    uid = user.uid;
+    return uid;
+  }
+
 }

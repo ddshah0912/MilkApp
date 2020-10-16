@@ -10,6 +10,9 @@ import 'package:table_calendar/table_calendar.dart';
 import 'package:customer/services/database/itemdatabase.dart';
 import 'package:intl/intl.dart';
 import 'package:customer/services/auth.dart';
+import 'package:razorpay_flutter/razorpay_flutter.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:flutter/services.dart';
 import 'dart:async';
 
 class Subscribe extends StatefulWidget {
@@ -30,6 +33,10 @@ class SubscribePage extends State<Subscribe> {
   SubscribePage({this.item});
   int _n = 1;
   String uid;
+
+  static const platform = const MethodChannel("razorpay_flutter");
+
+  Razorpay _razorpay;
 
   Future displayDateRangePicker(BuildContext context) async {
     final List<DateTime> picked = await DateRangePicker.showDatePicker(
@@ -167,10 +174,7 @@ class SubscribePage extends State<Subscribe> {
                     bool avilable =
                         await ItemDatabase().isItemAvailable(item.id);
                     if (avilable == true) {
-                      uid = await getUserId();
-                      Navigator.of(context).pop();
-                      await OrderDatabase().updateOrderData(
-                          uid, item.name,item.price, _startDate, _endDate, _n);
+                      openCheckout();
                     } else {
                       return showDialog(
                           context: context,
@@ -225,4 +229,61 @@ class SubscribePage extends State<Subscribe> {
     uid = user.uid;
     return uid;
   }
+
+  @override
+  void initState() {
+    super.initState();
+    _razorpay = Razorpay();
+    _razorpay.on(Razorpay.EVENT_PAYMENT_SUCCESS, _handlePaymentSuccess);
+    _razorpay.on(Razorpay.EVENT_PAYMENT_ERROR, _handlePaymentError);
+    _razorpay.on(Razorpay.EVENT_EXTERNAL_WALLET, _handleExternalWallet);
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _razorpay.clear();
+  }
+
+  void openCheckout() async {
+    uid = await getUserId();
+    User user = await UserDatabase().getCustomerById(uid);
+    int amount = (item.price)*_n;
+    var options = {
+      'key': 'rzp_test_1DP5mmOlF5G5ag',
+      'amount': amount*100,
+      'name': '${user.firstname} ${user.lastname}',
+      'description': '${item.name}',
+      'prefill': {'contact': '${user.contact}', 'email': 'test@razorpay.com'},
+      'external': {
+        'wallets': ['paytm']
+      }
+    };
+
+    try {
+      _razorpay.open(options);
+    } catch (e) {
+      debugPrint(e);
+    }
+  }
+
+  void _handlePaymentSuccess(PaymentSuccessResponse response) async {
+    Fluttertoast.showToast(
+        msg: "SUCCESS: " + response.paymentId, timeInSecForIos: 4);
+
+    uid = await getUserId();
+    await OrderDatabase().updateOrderData(uid, item.name,item.price, _startDate, _endDate, _n);
+  }
+
+  void _handlePaymentError(PaymentFailureResponse response) {
+    Fluttertoast.showToast(
+        msg: "ERROR: " + response.code.toString() + " - " + response.message,
+        timeInSecForIos: 4);
+  }
+
+  void _handleExternalWallet(ExternalWalletResponse response) {
+    Fluttertoast.showToast(
+        msg: "EXTERNAL_WALLET: " + response.walletName, timeInSecForIos: 4);
+  }
+
 }

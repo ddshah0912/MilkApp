@@ -4,18 +4,20 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class ViewOrder extends StatefulWidget {
+  final Order order;
   DateTime selectedDate;
-  ViewOrder({this.selectedDate});
+  ViewOrder({this.selectedDate,this.order});
 
   @override
-  ViewOrderPage createState() => ViewOrderPage(selectedDate: selectedDate);
+  ViewOrderPage createState() => ViewOrderPage(selectedDate: selectedDate, order: order);
 }
 
 class ViewOrderPage extends State<ViewOrder> {
   DateTime selectedDate;
+  final Order order;
   final FirebaseAuth auth = FirebaseAuth.instance;
   String uid;
-  ViewOrderPage({this.selectedDate});
+  ViewOrderPage({this.selectedDate,this.order});
 
   @override
   Widget build(BuildContext context) {
@@ -46,7 +48,7 @@ class ViewOrderPage extends State<ViewOrder> {
     uid = await getUserId();
     print(uid);
     Order order = await OrderDatabase().getOrderByDate(uid);
-    if (date.compareTo(order.sdate) <= 0 && date.compareTo(order.edate) >= 0) {
+    if (date.compareTo(order.sdate) >= 0 && date.compareTo(order.edate) <= 0) {
       return Container(
         child: Column(
           children: <Widget>[
@@ -62,8 +64,8 @@ class ViewOrderPage extends State<ViewOrder> {
     }
     else{
       return Container(
-        child: Text('Not Found'),
-      );
+         child: Text('Not Found'),
+       );
     }
   }
 
