@@ -85,7 +85,7 @@ class ManagePage extends State<Manage> {
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        child: Icon(Icons.add),
+        child: Icon(Icons.search),
         onPressed: () async{
           
           uid = await getUserId();
