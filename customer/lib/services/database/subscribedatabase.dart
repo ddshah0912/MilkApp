@@ -28,6 +28,7 @@ class OrderDatabase {
     DateTime sdate,
     DateTime edate,
     int noOfItem,
+    int amount,
   ) async {
     return await orderCollection.document().setData({
       'custId': custId,
@@ -36,7 +37,7 @@ class OrderDatabase {
       'sdate': sdate,
       'edate': edate,
       'noOfItem': noOfItem,
-      'amount': noOfItem * itemPrice,
+      'amount': amount,
     });
   }
 

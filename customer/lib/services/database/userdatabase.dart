@@ -7,11 +7,12 @@ class UserDatabase{
 
   final CollectionReference adminCollection=Firestore.instance.collection('customer');
 
-  Future<void> updateUserData(String fname,String lname,String contact) async {
+  Future<void> updateUserData(String fname, String lname, String contact, int wallet) async {
     return await adminCollection.document(uid).setData({
       'firstname':fname,
       'lastname':lname,
       'contact':contact,
+      'wallet': wallet,
     });
   }
 
@@ -40,7 +41,18 @@ class UserDatabase{
       contact: doc.data['contact'],
       firstname: doc.data['firstname'],
       lastname: doc.data['lastname'], 
+      wallet: doc.data['wallet'],
     );
+  }
+
+  Future<void> updateWallet(String uid, int wallet) async {
+    try{
+      return await adminCollection.document(uid).updateData({
+        'wallet': wallet,
+      });
+    }catch(Exception){
+      
+    }
   }
 
 }

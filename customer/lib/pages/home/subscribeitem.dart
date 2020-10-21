@@ -31,7 +31,8 @@ class SubscribePage extends State<Subscribe> {
 
   final Item item;
   SubscribePage({this.item});
-  int _n = 1;
+
+  int _n = 1, amount;
   String uid;
 
   static const platform = const MethodChannel("razorpay_flutter");
@@ -248,10 +249,16 @@ class SubscribePage extends State<Subscribe> {
   void openCheckout() async {
     uid = await getUserId();
     User user = await UserDatabase().getCustomerById(uid);
-    int amount = (item.price)*_n;
+    int difference = _endDate.difference(_startDate).inDays;
+    amount = (item.price)*_n*100*(difference + 1);
+    print(amount);
+    int wallet = user.wallet*100;
+     if(amount > wallet)
+       amount = amount - wallet;
+    print(difference);
     var options = {
       'key': 'rzp_test_1DP5mmOlF5G5ag',
-      'amount': amount*100,
+      'amount': amount,
       'name': '${user.firstname} ${user.lastname}',
       'description': '${item.name}',
       'prefill': {'contact': '${user.contact}', 'email': 'test@razorpay.com'},
@@ -272,7 +279,7 @@ class SubscribePage extends State<Subscribe> {
         msg: "SUCCESS: " + response.paymentId, timeInSecForIos: 4);
 
     uid = await getUserId();
-    await OrderDatabase().updateOrderData(uid, item.name,item.price, _startDate, _endDate, _n);
+    await OrderDatabase().updateOrderData(uid, item.name,item.price, _startDate, _endDate, _n, amount);
   }
 
   void _handlePaymentError(PaymentFailureResponse response) {
