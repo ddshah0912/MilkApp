@@ -18,9 +18,20 @@ class CustomerDatabase {
         city: doc.data['city'],
         pincode: doc.data['pincode'],
         country: doc.data['country'],
+        wallet: doc.data['wallet']
       );
     } catch (e) {
       return null;
+    }
+  }
+
+  Future<void> updateWallet(String uid, int wallet) async {
+    try{
+      return await customerCollection.document(uid).updateData({
+        'wallet': wallet,
+      });
+    }catch(Exception){
+      
     }
   }
 }

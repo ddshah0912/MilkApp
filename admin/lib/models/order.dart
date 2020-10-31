@@ -4,5 +4,6 @@ class Order{
   int amount,itemPrice;
   int noOfItems;
   DateTime sdate,edate; 
-  Order({this.id,this.custId, this.itemName,this.itemPrice,this.noOfItems,this.amount,this.sdate,this.edate});
+  bool completed;
+  Order({this.id,this.custId, this.itemName,this.itemPrice,this.noOfItems,this.amount,this.sdate,this.edate,this.completed});
 }

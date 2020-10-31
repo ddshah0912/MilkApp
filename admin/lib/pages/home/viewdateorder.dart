@@ -1,40 +1,47 @@
+import 'package:admin/models/cancel.dart';
 import 'package:admin/models/customer.dart';
-import 'package:admin/services/database/orderdatabase.dart';
-import 'package:flutter/material.dart';
 import 'package:admin/models/order.dart';
+import 'package:admin/models/user.dart';
 import 'package:admin/services/database/customerdatabase.dart';
-import 'package:provider/provider.dart';
-import 'package:url_launcher/url_launcher.dart';
 import 'package:admin/pages/home/cancelList.dart';
 import 'package:admin/services/database/cancelorder.dart';
-import 'package:admin/models/cancel.dart';
+import 'package:admin/services/database/orderdatabase.dart';
+import 'package:admin/services/database/userdatabase.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:url_launcher/url_launcher.dart';
 
-class ViewOrderDetails extends StatefulWidget {
+class ViewOrder extends StatefulWidget {
   final Order order;
-  ViewOrderDetails({this.order});
+  DateTime selectedDate;
+  ViewOrder({this.selectedDate, this.order});
+
   @override
-  _ViewOrderDetailsState createState() => _ViewOrderDetailsState(order: order);
+  ViewOrderPage createState() =>
+      ViewOrderPage(selectedDate: selectedDate, order: order);
 }
 
-class _ViewOrderDetailsState extends State<ViewOrderDetails> {
+class ViewOrderPage extends State<ViewOrder> {
+  DateTime selectedDate;
   final Order order;
-  String status = "Order Not completed";
-  _ViewOrderDetailsState({this.order});
+  final FirebaseAuth auth = FirebaseAuth.instance;
+  String uid;
+  ViewOrderPage({this.selectedDate, this.order});
+
   @override
   Widget build(BuildContext context) {
-    if (order.completed == true) {
-      status = "Order Completed";
-    }
     return Scaffold(
       appBar: AppBar(
         title: Text('MilkInWay'),
+        centerTitle: true,
       ),
       body: ListView(
         padding: EdgeInsets.only(left: 20.0, right: 20.0),
         children: <Widget>[
           Expanded(
               child: FutureBuilder(
-                  future: viewCustomer(),
+                  future: viewadmin(selectedDate),
                   builder: (context, AsyncSnapshot<Widget> snapshot) {
                     Widget widget = Container();
                     if (snapshot.hasData) {
@@ -44,40 +51,11 @@ class _ViewOrderDetailsState extends State<ViewOrderDetails> {
                   })),
         ],
       ),
-      floatingActionButton: FloatingActionButton(
-        child: Icon(Icons.done),
-        onPressed: () async {
-          showDialog(
-            context: context,
-            builder: (context) {
-              return AlertDialog(
-                title: Text('Completed'),
-                content: Text('This order will marked as completed'),
-                actions: <Widget>[
-                  MaterialButton(
-                      child: Text('Cancel'),
-                      onPressed: () {
-                        Navigator.of(context).pop();
-                      }),
-                  MaterialButton(
-                      child: Text('Confirm'),
-                      onPressed: () async {
-                        await OrderDatabase().markCompleted(order.id);
-                        setState(() => status = 'Order Completed');
-                        Navigator.of(context).pop();
-                      }),
-                ],
-              );
-            },
-          );
-        },
-      ),
     );
   }
 
-  Future<Widget> viewCustomer() async {
+  Future<Widget> viewadmin(DateTime date) async {
     Customer customer = await CustomerDatabase().getCustomerById(order.custId);
-    //Item item = await ItemDatabase().getItemById(order.itemId);
     return Container(
       child: Column(
         children: <Widget>[
@@ -250,6 +228,24 @@ class _ViewOrderDetailsState extends State<ViewOrderDetails> {
           Row(
             children: <Widget>[
               Text(
+                'Selected Date:',
+                style: TextStyle(
+                  fontSize: 20.0,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              Expanded(
+                  child: Text(
+                '$selectedDate',
+                style: TextStyle(
+                  fontSize: 16.0,
+                ),
+              )),
+            ],
+          ),
+          Row(
+            children: <Widget>[
+              Text(
                 'Item Ordered',
                 style: TextStyle(
                   fontSize: 20.0,
@@ -365,30 +361,6 @@ class _ViewOrderDetailsState extends State<ViewOrderDetails> {
                   fontSize: 16.0,
                 ),
               ),
-            ],
-          ),
-          const Divider(
-              color: Colors.black26,
-              height: 10,
-              thickness: 2,
-              indent: 0,
-              endIndent: 0),
-          Row(
-            children: <Widget>[
-              Text(
-                'Status: ',
-                style: TextStyle(
-                  fontSize: 16.0,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              Expanded(
-                  child: Text(
-                status,
-                style: TextStyle(
-                  fontSize: 16.0,
-                ),
-              )),
             ],
           ),
           const Divider(

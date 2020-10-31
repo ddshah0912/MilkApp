@@ -17,6 +17,7 @@ class OrderDatabase{
         amount: doc.data['amount'] ?? 0,
         itemName: doc.data['itemName'] ?? '',
         itemPrice: doc.data['itemPrice'] ?? 0,
+        completed: doc.data['completed'] ?? false,
       );
     }).toList();
   }
@@ -24,5 +25,15 @@ class OrderDatabase{
   //get item snapshot
   Stream<List<Order>> get orders {
     return orderCollection.snapshots().map(_orderListFromSnapshot);
+  }
+
+  Future<void> markCompleted(String oid) async {
+    try{
+      return await orderCollection.document(oid).updateData({
+        'completed': true,
+      });
+    }catch(Exception){
+      
+    }
   }
 }
