@@ -24,18 +24,6 @@ class _EditUserPage extends State<userPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      /*appBar: AppBar(
-        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-        elevation: 1,
-        leading: IconButton(
-          icon: Icon(
-            Icons.arrow_back,
-            color: Colors.green,
-          ),
-          onPressed: () {
-          },
-        ),
-      ),*/
       body: Container(
         padding: EdgeInsets.only(left: 16, top: 25, right: 16),
         child: GestureDetector(
@@ -79,22 +67,22 @@ class _EditUserPage extends State<userPage> {
         child: Column(
           children: <Widget>[
             Center(
-                child: Stack(
-                  children: [
-                    Container(
-                      width: 300,
-                      height: 130,
-                      child: Card(
-                        child: Container(
-                          width: 300,
-                          height: 100,
-                          child: Text('Wallet Balance : ${user.wallet}'),
-                        ),
+              child: Stack(
+                children: [
+                  Container(
+                    width: 300,
+                    height: 130,
+                    child: Card(
+                      child: Container(
+                        width: 300,
+                        height: 100,
+                        child: Text('Wallet Balance : ${user.wallet}'),
                       ),
                     ),
-                  ],
-                ),
+                  ),
+                ],
               ),
+            ),
             Padding(
               padding: const EdgeInsets.all(20.0),
               child: Row(

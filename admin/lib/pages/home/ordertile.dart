@@ -14,6 +14,7 @@ class OrderTile extends StatelessWidget {
         child: ListTile(
           leading: const Icon(Icons.assignment),
           title: Text(order.sdate.day.toString()+"/"+order.sdate.month.toString()+"/"+order.sdate.year.toString()+" to "+order.edate.day.toString()+"/"+order.edate.month.toString()+"/"+order.edate.year.toString()),
+          subtitle: Text(order.itemName),
           onTap: () async {
             Navigator.push(
                 context,

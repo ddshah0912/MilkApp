@@ -42,6 +42,11 @@ class UserDatabase{
       firstname: doc.data['firstname'],
       lastname: doc.data['lastname'], 
       wallet: doc.data['wallet'],
+      city: doc.data['city'],
+      country: doc.data['country'],
+      houseNo: doc.data['houseNo'],
+      landmark: doc.data['landmark'],
+      pincode: doc.data['pincode'],  
     );
   }
 

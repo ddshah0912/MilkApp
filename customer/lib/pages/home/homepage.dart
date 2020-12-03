@@ -1,6 +1,9 @@
 import 'package:carousel_pro/carousel_pro.dart';
 import 'package:customer/models/item.dart';
+import 'package:customer/models/user.dart';
 import 'package:customer/services/database/itemdatabase.dart';
+import 'package:customer/services/database/userdatabase.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_google_places/flutter_google_places.dart';
@@ -10,48 +13,17 @@ import 'package:customer/pages/home/itemcard.dart';
 import 'package:customer/pages/home/searchfield.dart';
 import 'package:provider/provider.dart';
 import 'package:table_calendar/table_calendar.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
-/*class Home extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return new Container(
-        child: new Center(
-            child: TextField(
-      onTap: () async {
-        Prediction p = await PlacesAutocomplete.show(
-            context: context,
-            apiKey: null,
-            language: "en",
-            components: [Component(Component.country, "in")]);
-      },
-      textInputAction: TextInputAction.go,
-      decoration: InputDecoration(
-        icon: Container(
-          margin: EdgeInsets.only(left: 20, top: 5),
-          width: 10,
-          height: 10,
-          child: Icon(
-            Icons.location_on,
-            color: Colors.black,
-          ),
-        ),
-        hintText: "find location",
-        border: InputBorder.none,
-        contentPadding: EdgeInsets.only(left: 15.0, top: 16.0),
-      ),
-    )));
-  }
-}*/
-
-class Home extends StatefulWidget{
+class Home extends StatefulWidget {
   @override
   _Home createState() => _Home();
 }
 
-class _Home extends State<Home>{
+class _Home extends State<Home> {
   CalendarController _controller = CalendarController();
   @override
-  Widget build(BuildContext context){
+  Widget build(BuildContext context) {
     Widget image_slider_carousel = Container(
       height: 200,
       child: Carousel(
@@ -65,34 +37,51 @@ class _Home extends State<Home>{
         ],
         autoplay: true,
         indicatorBgPadding: 1.0,
-      ), 
+      ),
     );
     return Scaffold(
-      body: ListView(
-        padding: EdgeInsets.only(top: 50.0, left: 0.0, right: 0.0),
-        children: <Widget>[
-          SearchField(),
-          Text("\n"),
-          image_slider_carousel,
-          Text("\n"),
-          TableCalendar(calendarController: _controller, initialCalendarFormat: CalendarFormat.week, headerVisible: false, ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  Text("\nProducts\n", style:TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold),)
-                ],
-              ),
-            ],
-          ),
-          viewItem(),
-        ],
-      )
-    );
+        body: ListView(
+      padding: EdgeInsets.only(top: 50.0, left: 0.0, right: 0.0),
+      children: <Widget>[
+        SearchField(),
+        Text("\n"),
+        Expanded(
+            child: FutureBuilder(
+                future: viewRecentLocation(),
+                builder: (context, AsyncSnapshot<Widget> snapshot) {
+                  Widget widget = Container();
+                  if (snapshot.hasData) {
+                    widget = snapshot.data;
+                  }
+                  return widget;
+                })),
+        image_slider_carousel,
+        Text("\n"),
+        TableCalendar(
+          calendarController: _controller,
+          initialCalendarFormat: CalendarFormat.week,
+          headerVisible: false,
+        ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                Text(
+                  "\nProducts\n",
+                  style: TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold),
+                )
+              ],
+            ),
+          ],
+        ),
+        viewItem(),
+      ],
+    ));
   }
+
   Widget viewItem() {
     return Container(
       child: StreamProvider<List<Item>>.value(
@@ -100,5 +89,23 @@ class _Home extends State<Home>{
         child: ItemList(),
       ),
     );
+  }
+
+  Future<Widget> viewRecentLocation() async {
+    final FirebaseAuth _auth = FirebaseAuth.instance;
+    final FirebaseUser user = await _auth.currentUser();
+    User curUser = await UserDatabase().getCustomerById(user.uid);
+    if (curUser.city!=null && curUser.houseNo!=null) {
+      return Container(
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Text(
+              'Recent Location: City: ${curUser.city}   Pincode: ${curUser.pincode}'),
+        ),
+      );
+    }
+    else{
+      return Container();
+    }
   }
 }
